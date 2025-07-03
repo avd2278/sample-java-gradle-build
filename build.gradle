@@ -1,0 +1,48 @@
+plugins {
+    id 'java' // Apply the Java plugin for building Java projects
+    id 'application' // Apply the Application plugin for creating runnable JARs
+}
+
+defaultTasks 'build'
+
+group = 'com.sample' // Define the group ID for your project
+version = '1.0-SNAPSHOT' // Define the version of your project
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(libs.versions.javaVersion.get())
+    vendor = JvmVendorSpec.AMAZON
+  }
+}
+
+repositories {
+    mavenCentral() // Specify Maven Central as the repository for dependencies
+}
+
+dependencies {
+    // Add any necessary dependencies here
+
+    // Servlet, JSP, and JSTL dependencies
+	compileOnly libs.servlet
+	
+	// Logging dependencies
+	implementation libs.bundles.log4j2Web
+	
+	// Test dependencies
+	testImplementation libs.junit5.api
+	testRuntimeOnly libs.junit5.engine
+  
+    // For example, if you needed JUnit for testing:
+    // testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    // testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+
+test {
+	// excluding tests until we come up with a strategy for separating out unit tests from integration tests
+	exclude '**/**'
+	useJUnitPlatform()
+}
+
+application {
+    mainClass = 'com.sample.hello.Hello' // Specify the main class for your application
+}
