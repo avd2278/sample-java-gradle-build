@@ -1,0 +1,25 @@
+// Allows plugins (e.g. KFBGradleCommons) to be sourced from your local maven repo
+pluginManagement {
+	repositories {
+		mavenLocal()
+		gradlePluginPortal()
+	}
+}
+
+// Plugin which downloads JREs when needed, see: https://github.com/gradle/foojay-toolchains
+plugins {
+	id("org.gradle.toolchains.foojay-resolver-convention") version "0.10.0"
+}
+
+// Overrides default location of libs.versions.toml file so we can consistently use the same version of jars
+// See: https://docs.gradle.org/current/userguide/platforms.html#sec:sharing-catalogs
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from(files("${settings.gradle.gradleUserHomeDir}/libs.versions/libs.versions-1.0.0.toml"))
+        }
+    }
+}
+
+// has to match the directory name of the project otherwise Eclipse doesn't work with Gradle
+rootProject.name = 'sample-java-gradle-build'
